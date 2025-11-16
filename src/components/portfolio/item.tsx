@@ -27,6 +27,7 @@ export function GalleryItem({
 	return (
 		<motion.div
 			className="absolute overflow-hidden rounded-[4px] transition-all duration-200"
+			data-gallery-item
 			initial={{ zIndex: 1 }}
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
