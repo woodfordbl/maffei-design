@@ -6,6 +6,7 @@ import {
 	type ComponentPropsWithoutRef,
 	createContext,
 	type ReactNode,
+	useCallback,
 	useContext,
 	useEffect,
 	useRef,
@@ -17,6 +18,7 @@ import { cn } from "@/lib/utils";
 type MobileMenuContextValue = {
 	open: boolean;
 	setOpen: (open: boolean) => void;
+	closeMenu: () => void;
 	isAnimating: boolean;
 	setIsAnimating: (animating: boolean) => void;
 	tilesComplete: boolean;
@@ -52,6 +54,10 @@ function MobileMenuRoot({ children, tileSize = 40 }: MobileMenuRootProps) {
 		null
 	) as unknown as React.RefObject<Dialog.Root.Actions>;
 	const router = useRouter();
+	const closeMenu = useCallback(() => {
+		setIsAnimating(false);
+		setOpen(false);
+	}, []);
 
 	// Calculate dimensions on client-side only
 	useEffect(() => {
@@ -61,7 +67,7 @@ function MobileMenuRoot({ children, tileSize = 40 }: MobileMenuRootProps) {
 
 		const calculateDimensions = () => {
 			const calculatedCols = Math.ceil(window.innerWidth / tileSize);
-			const calculatedRows = Math.ceil((window.innerHeight - 64) / tileSize);
+			const calculatedRows = Math.ceil(window.innerHeight / tileSize);
 			setDimensions({ cols: calculatedCols, rows: calculatedRows });
 		};
 
@@ -74,12 +80,12 @@ function MobileMenuRoot({ children, tileSize = 40 }: MobileMenuRootProps) {
 	useEffect(() => {
 		const unsubscribe = router.subscribe("onBeforeLoad", () => {
 			if (open) {
-				setIsAnimating(false);
+				closeMenu();
 			}
 		});
 
 		return unsubscribe;
-	}, [router, open]);
+	}, [router, open, closeMenu]);
 
 	const handleOpenChange = (newOpen: boolean) => {
 		if (newOpen) {
@@ -88,9 +94,8 @@ function MobileMenuRoot({ children, tileSize = 40 }: MobileMenuRootProps) {
 			setIsAnimating(true);
 			setTilesComplete(false);
 		} else {
-			// Closing: trigger exit animations but keep dialog mounted
-			setIsAnimating(false);
-			// Actual close will happen after animations complete
+			// Start closing animations while keeping portal mounted
+			closeMenu();
 		}
 	};
 
@@ -99,6 +104,7 @@ function MobileMenuRoot({ children, tileSize = 40 }: MobileMenuRootProps) {
 			value={{
 				open,
 				setOpen,
+				closeMenu,
 				isAnimating,
 				setIsAnimating,
 				tilesComplete,
@@ -155,13 +161,11 @@ function MobileMenuContent({
 		setTilesComplete,
 		actionsRef,
 		open,
-		setOpen,
 	} = useMobileMenuContext();
 
 	const handleAnimationComplete = () => {
 		// Called when exit animations complete
-		if (!isAnimating && open) {
-			setOpen(false);
+		if (!open) {
 			actionsRef.current?.unmount();
 		}
 	};
@@ -187,10 +191,7 @@ function MobileMenuContent({
 
 	return (
 		<Dialog.Portal>
-			<Dialog.Popup
-				className={cn("fixed inset-0 z-40 pt-16", className)}
-				style={{ top: "64px" }}
-			>
+			<Dialog.Popup className={cn("fixed inset-0 z-60", className)}>
 				{/* Tile Grid Background */}
 				<div className="absolute inset-0 overflow-hidden">
 					<AnimatePresence onExitComplete={handleAnimationComplete}>
@@ -255,11 +256,11 @@ function MobileMenuClose({
 	children,
 	...props
 }: MobileMenuCloseProps) {
-	const { setIsAnimating } = useMobileMenuContext();
+	const { closeMenu } = useMobileMenuContext();
 	const Comp = asChild ? Slot : "button";
 
 	const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
-		setIsAnimating(false);
+		closeMenu();
 		onClick?.(event);
 	};
 
@@ -281,11 +282,11 @@ function MobileMenuLink({
 	onClick,
 	...props
 }: MobileMenuLinkProps) {
-	const { setIsAnimating } = useMobileMenuContext();
+	const { closeMenu } = useMobileMenuContext();
 	const Comp = asChild ? Slot : "a";
 
 	const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-		setIsAnimating(false);
+		closeMenu();
 		onClick?.(event);
 	};
 

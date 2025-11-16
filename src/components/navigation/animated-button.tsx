@@ -49,8 +49,8 @@ export function AnimatedButton({
 		textColor = isHovered ? "text-background" : "text-foreground";
 		fillColor = "bg-foreground";
 		borderColor = "";
-		bgColor = "";
-		hoverOverride = "";
+		bgColor = "bg-transparent";
+		hoverOverride = "hover:bg-transparent";
 	}
 
 	return (

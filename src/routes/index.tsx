@@ -32,7 +32,9 @@ function HomePage() {
 					attachToParent
 					onPositionChange={handlePositionChange}
 					springConfig={{
-						bounce: 0.001,
+						stiffness: 400,
+						damping: 30,
+						mass: 0.5,
 					}}
 					transition={{
 						ease: "easeInOut",
