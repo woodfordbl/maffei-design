@@ -13,18 +13,19 @@ export const underlineStyles = "absolute bottom-0 left-0 h-px w-full";
  * - Hover animation: Underline animates from left to right on hover
  * - Active/Click animation: Spring-based underline animation for active or clicked links
  * - Shared element transition: Uses layoutId for smooth transitions between active links
- * - Uses data-active attribute for styling active state
+ * - Uses data-active attribute for styling active state (automatically set by TanStack Router)
  * - Pure motion component using framer-motion lifecycle callbacks
  * - Supports inverted color scheme for dark backgrounds
+ * - Supports link-active: CSS variant for styling active links
  */
 export function AnimatedLink({
-	isActive = false,
+	isActive,
 	inverted = false,
 	className,
 	children,
 	...linkProps
 }: Omit<React.ComponentProps<typeof Link>, "children"> & {
-	/** Whether the link is currently active */
+	/** Whether the link is currently active (optional - will be auto-detected by TanStack Router if not provided) */
 	isActive?: boolean;
 	/** Whether to use inverted colors (light on dark) */
 	inverted?: boolean;
@@ -41,8 +42,10 @@ export function AnimatedLink({
 	return (
 		<Link
 			{...linkProps}
+			activeProps={{ "data-active": "" }}
 			className={cn(linkStyles, textColor, className)}
 			data-active={isActive ? "" : undefined}
+			inactiveProps={{ "data-active": undefined }}
 			onMouseEnter={() => setIsHovered(true)}
 			onMouseLeave={() => setIsHovered(false)}
 		>

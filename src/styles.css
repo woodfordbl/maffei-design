@@ -5,6 +5,7 @@
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant link-active (&[data-active]);
 
 body {
   @apply m-0;

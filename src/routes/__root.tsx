@@ -8,7 +8,7 @@ import {
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { Analytics } from "@vercel/analytics/react";
 import { Footer } from "@/components/footer";
-import { Header } from "@/components/header";
+import { Header } from "@/components/navigation/header";
 import { Toaster } from "@/components/ui/sonner";
 
 import appCss from "../styles.css?url";
