@@ -33,6 +33,7 @@ export function GalleryGrid({
 				return (
 					<GalleryItem
 						collection={item.collection}
+						collectionSlug={item.collectionSlug}
 						height={packed.height}
 						id={item.id}
 						imageUrl={item.imageUrl}

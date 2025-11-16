@@ -4,14 +4,13 @@ import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { Cursor } from "@/components/motion/cursor";
 import { GalleryContainer } from "@/components/portfolio/container";
-import { exampleGalleryItems } from "@/components/portfolio/example-data";
+import { generatePortfolioFromCollections } from "@/components/portfolio/generate-from-collections";
 import { useMobile } from "@/hooks/use-mobile";
 
 export const Route = createFileRoute("/")({ component: HomePage });
 
 function HomePage() {
-	// In the future with SSR:
-	// const items = Route.useLoaderData();
+	const items = generatePortfolioFromCollections();
 	const [isHovering, setIsHovering] = useState(false);
 	const isMobile = useMobile();
 
@@ -48,7 +47,7 @@ function HomePage() {
 				>
 					<motion.div
 						animate={{
-							width: isHovering ? 80 : 16,
+							width: isHovering ? 120 : 16,
 							height: isHovering ? 32 : 16,
 						}}
 						className="flex items-center justify-center rounded-[24px] bg-gray-500/40 backdrop-blur-md dark:bg-gray-300/40"
@@ -62,7 +61,8 @@ function HomePage() {
 									initial={{ opacity: 0, scale: 0.6 }}
 								>
 									<div className="inline-flex items-center text-sm text-white dark:text-black">
-										View <ArrowRight className="-rotate-45 ml-1 h-4 w-4" />
+										Collection
+										<ArrowRight className="-rotate-45 ml-1 h-4 w-4" />
 									</div>
 								</motion.div>
 							) : null}
@@ -70,7 +70,7 @@ function HomePage() {
 					</motion.div>
 				</Cursor>
 			)}
-			<GalleryContainer items={exampleGalleryItems} />
+			<GalleryContainer items={items} />
 		</div>
 	);
 }

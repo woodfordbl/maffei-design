@@ -7,17 +7,11 @@ export type AspectRatio =
 	| "16:9"
 	| "9:16";
 
-export type Collection =
-	| "Architecture"
-	| "Interior Design"
-	| "Product Design"
-	| "Branding"
-	| "Web Design";
-
 export type GalleryItem = {
-	id: string;
+	id: string; // Generated server-side
 	title: string;
-	collection: Collection;
+	collection: string;
+	collectionSlug: string; // Links to /collections/:slug
 	aspectRatio: AspectRatio;
 	scaleFactor: number;
 	imageUrl: string;

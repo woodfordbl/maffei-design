@@ -1,4 +1,4 @@
-import type { AspectRatio, Collection, GalleryItem } from "./types";
+import type { AspectRatio, GalleryItem } from "./types";
 
 // ============================================================================
 // RANDOM GENERATORS (for demo data only)
@@ -22,15 +22,15 @@ function randomAspectRatio(): AspectRatio {
 	return Math.random() < 0.5 ? "4:3" : "3:4";
 }
 
-const collections: Collection[] = [
-	"Architecture",
-	"Interior Design",
-	"Product Design",
-	"Branding",
-	"Web Design",
+const collections = [
+	{ name: "Architecture", slug: "architecture" },
+	{ name: "Interior Design", slug: "interior-design" },
+	{ name: "Product Design", slug: "product-design" },
+	{ name: "Branding", slug: "branding" },
+	{ name: "Web Design", slug: "web-design" },
 ];
 
-function randomCollection(): Collection {
+function randomCollection() {
 	return collections[Math.floor(Math.random() * collections.length)];
 }
 
@@ -81,10 +81,12 @@ export const exampleGalleryItems: GalleryItem[] = Array.from(
 	{ length: 30 },
 	(_, i) => {
 		const seed = imageSeedNumbers[i];
+		const collectionData = randomCollection();
 		return {
 			id: `gallery-item-${i + 1}`,
 			title: titles[i],
-			collection: randomCollection(),
+			collection: collectionData.name,
+			collectionSlug: collectionData.slug,
 			aspectRatio: randomAspectRatio(),
 			scaleFactor: randomScale(),
 			imageUrl: `https://picsum.photos/seed/${seed}/800/600`,

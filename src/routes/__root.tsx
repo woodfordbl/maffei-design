@@ -8,6 +8,7 @@ import {
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { Analytics } from "@vercel/analytics/react";
 import { Footer } from "@/components/footer";
+import { RouteTransitionProvider } from "@/components/motion/route-transition-provider";
 import { Header } from "@/components/navigation/header";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -41,7 +42,9 @@ function RootComponent() {
 	return (
 		<RootDocument>
 			<Header />
-			<Outlet />
+			<RouteTransitionProvider>
+				<Outlet />
+			</RouteTransitionProvider>
 			<Footer />
 		</RootDocument>
 	);

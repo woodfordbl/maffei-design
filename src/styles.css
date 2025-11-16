@@ -140,3 +140,71 @@ code {
     @apply bg-background text-foreground;
   }
 }
+
+/* View Transitions API Configuration */
+/* These styles apply when the browser supports View Transitions API */
+
+/* Disable the default page transition - we only want image morphing */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+/* Configure smooth morphing for all view-transitioned elements */
+/* The wildcard selector applies to any element with a view-transition-name */
+::view-transition-group(*) {
+  animation-duration: 1.2s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+::view-transition-old(*),
+::view-transition-new(*) {
+  mix-blend-mode: normal;
+  overflow: clip;
+}
+
+/* Smooth fade for the outgoing element */
+::view-transition-old(*) {
+  animation-name: vt-fade-out;
+  animation-duration: 1.2s;
+}
+
+/* Smooth fade for the incoming element */
+::view-transition-new(*) {
+  animation-name: vt-fade-in;
+  animation-duration: 1.2s;
+  animation-delay: 0.15s;
+}
+
+/* Optimized animations for smooth 60fps performance */
+@keyframes vt-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Ensure images maintain aspect ratio during transition */
+[data-transition-image] {
+  object-fit: cover;
+  display: block;
+}
+
+/* Fallback for browsers that don't support view transitions */
+@supports not (view-transition-name: none) {
+  /* Add a simple transition for unsupported browsers */
+  body {
+    transition: opacity 0.15s ease-in-out;
+  }
+}
