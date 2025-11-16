@@ -1,10 +1,14 @@
 import { TanStackDevtools } from "@tanstack/react-devtools";
-import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import {
+	createRootRoute,
+	HeadContent,
+	Outlet,
+	Scripts,
+} from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { Toaster } from "@/components/ui/sonner";
-
 import appCss from "../styles.css?url";
 
 export const Route = createRootRoute({
@@ -18,7 +22,7 @@ export const Route = createRootRoute({
 				content: "width=device-width, initial-scale=1",
 			},
 			{
-				title: "TanStack Start Starter",
+				title: "Jillian Maffei Design",
 			},
 		],
 		links: [
@@ -28,9 +32,18 @@ export const Route = createRootRoute({
 			},
 		],
 	}),
-
-	shellComponent: RootDocument,
+	shellComponent: RootComponent,
 });
+
+function RootComponent() {
+	return (
+		<RootDocument>
+			<Header />
+			<Outlet />
+			<Footer />
+		</RootDocument>
+	);
+}
 
 function RootDocument({ children }: { children: React.ReactNode }) {
 	return (
@@ -39,7 +52,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				<HeadContent />
 			</head>
 			<body>
-				<Header />
 				{children}
 				<TanStackDevtools
 					config={{
@@ -54,7 +66,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				/>
 				<Scripts />
 				<Toaster />
-				<Footer />
 			</body>
 		</html>
 	);

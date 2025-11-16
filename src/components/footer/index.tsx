@@ -230,22 +230,6 @@ export function Footer() {
 							Maffei Design
 						</span>
 					</div>
-
-					{/* Center: Terms & Credits */}
-					<div className="flex flex-col items-start gap-4 text-muted-foreground text-sm md:flex-row md:items-center md:gap-8">
-						<a
-							className="transition-colors hover:text-foreground"
-							href="#terms"
-						>
-							Terms & Conditions
-						</a>
-						<span className="hidden md:inline">Made by Maffei Design</span>
-					</div>
-
-					{/* Right: Buttons (optional - can be removed if not needed) */}
-					<div className="flex flex-col gap-2">
-						{/* Add any additional buttons here if needed */}
-					</div>
 				</div>
 			</div>
 		</footer>

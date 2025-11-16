@@ -31,9 +31,7 @@ export function Header() {
 				<div className="flex md:hidden">
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
-							<Button size="icon" variant="ghost">
-								Menu
-							</Button>
+							<Button variant="outline">Menu</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="end" className="w-48">
 							{navLinks.map((link) => (

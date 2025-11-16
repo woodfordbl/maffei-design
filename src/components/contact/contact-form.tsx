@@ -208,7 +208,7 @@ export function ContactForm() {
 									{/* Fill animation background - animates from left to right */}
 									<motion.div
 										animate={{ scaleX: isHovered && !isSubmitting ? 1 : 0 }}
-										className="absolute inset-0 bg-accent"
+										className="absolute inset-0 bg-primary"
 										initial={{ scaleX: 0 }}
 										style={{ transformOrigin: "left" }}
 										transition={{
@@ -221,7 +221,7 @@ export function ContactForm() {
 										className={cn(
 											"relative z-10 transition-colors duration-300",
 											isHovered && !isSubmitting
-												? "text-accent-foreground"
+												? "text-primary-foreground"
 												: "text-foreground"
 										)}
 									>
