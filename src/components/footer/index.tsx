@@ -96,7 +96,7 @@ export function Footer() {
 						<nav className="flex flex-col space-y-2">
 							{sitemapLinks.map((link) => (
 								<AnimatedLink
-									className="font-normal text-base text-foreground"
+									className="w-fit font-normal text-base text-foreground"
 									key={link.href}
 									to={link.href as "/"}
 								>
@@ -128,7 +128,7 @@ export function Footer() {
 						</p>
 						<div className="flex flex-col space-y-2">
 							<AnimatedExternalLink
-								className="font-normal text-base text-foreground"
+								className="w-fit font-normal text-base text-foreground"
 								href="https://www.instagram.com/jillianmaffeidesigns/"
 								rel="noopener noreferrer"
 								target="_blank"
@@ -136,7 +136,7 @@ export function Footer() {
 								Instagram
 							</AnimatedExternalLink>
 							<AnimatedExternalLink
-								className="font-normal text-base text-foreground"
+								className="w-fit font-normal text-base text-foreground"
 								href="https://x.com"
 								rel="noopener noreferrer"
 								target="_blank"
@@ -144,7 +144,7 @@ export function Footer() {
 								X.com
 							</AnimatedExternalLink>
 							<AnimatedExternalLink
-								className="font-normal text-base text-foreground"
+								className="w-fit font-normal text-base text-foreground"
 								href="https://www.threads.net/@jillianmaffeidesigns"
 								rel="noopener noreferrer"
 								target="_blank"
@@ -219,16 +219,6 @@ export function Footer() {
 								)}
 							</newsletterForm.Field>
 						</form>
-					</div>
-				</div>
-
-				{/* Bottom Section */}
-				<div className="flex flex-col items-start justify-between gap-4 border-border border-t pt-8 md:flex-row md:items-center">
-					{/* Left: Brand */}
-					<div className="flex items-center">
-						<span className="font-bold text-foreground text-lg">
-							Maffei Design
-						</span>
 					</div>
 				</div>
 			</div>

@@ -38,18 +38,12 @@ const useMobileMenuContext = () => {
 };
 
 // Root Component
-type MobileMenuRootProps = Omit<
-	Dialog.Root.Props,
-	"open" | "onOpenChange" | "actionsRef"
-> & {
+type MobileMenuRootProps = {
+	children: ReactNode;
 	tileSize?: number;
 };
 
-function MobileMenuRoot({
-	children,
-	tileSize = 40,
-	...dialogProps
-}: MobileMenuRootProps) {
+function MobileMenuRoot({ children, tileSize = 40 }: MobileMenuRootProps) {
 	const [open, setOpen] = useState(false);
 	const [isAnimating, setIsAnimating] = useState(false);
 	const [tilesComplete, setTilesComplete] = useState(false);
@@ -79,13 +73,13 @@ function MobileMenuRoot({
 	// Close menu when route changes
 	useEffect(() => {
 		const unsubscribe = router.subscribe("onBeforeLoad", () => {
-			if (open || isAnimating) {
+			if (open) {
 				setIsAnimating(false);
 			}
 		});
 
 		return unsubscribe;
-	}, [router, open, isAnimating]);
+	}, [router, open]);
 
 	const handleOpenChange = (newOpen: boolean) => {
 		if (newOpen) {
@@ -118,7 +112,6 @@ function MobileMenuRoot({
 				modal
 				onOpenChange={handleOpenChange}
 				open={open}
-				{...dialogProps}
 			>
 				{children}
 			</Dialog.Root>
@@ -127,7 +120,7 @@ function MobileMenuRoot({
 }
 
 // Trigger Component
-type MobileMenuTriggerProps = Dialog.Trigger.Props & {
+type MobileMenuTriggerProps = ComponentPropsWithoutRef<"button"> & {
 	asChild?: boolean;
 };
 
@@ -139,27 +132,21 @@ function MobileMenuTrigger({
 	const Comp = asChild ? Slot : "button";
 
 	return (
-		<Dialog.Trigger {...props}>
-			<Comp>{children}</Comp>
-		</Dialog.Trigger>
+		<Dialog.Trigger render={<Comp {...props} />}>{children}</Dialog.Trigger>
 	);
 }
 
 // Content Component
-type MobileMenuContentProps = Omit<
-	Dialog.Popup.Props,
-	"className" | "style"
-> & {
+type MobileMenuContentProps = {
 	children: ReactNode;
-	className?: string;
 	tileSize?: number;
+	className?: string;
 };
 
 function MobileMenuContent({
 	children,
 	className,
 	tileSize = 40,
-	...popupProps
 }: MobileMenuContentProps) {
 	const {
 		isAnimating,
@@ -203,7 +190,6 @@ function MobileMenuContent({
 			<Dialog.Popup
 				className={cn("fixed inset-0 z-40 pt-16", className)}
 				style={{ top: "64px" }}
-				{...popupProps}
 			>
 				{/* Tile Grid Background */}
 				<div className="absolute inset-0 overflow-hidden">
@@ -238,36 +224,50 @@ function MobileMenuContent({
 				</div>
 
 				{/* Menu Content */}
-
-				<AnimatePresence>
-					{isAnimating && (
-						<motion.div
-							animate={{ opacity: tilesComplete ? 1 : 0 }}
-							exit={{ opacity: 0 }}
-							initial={{ opacity: 0 }}
-							transition={{ duration: 0.3 }}
-						>
-							{children}
-						</motion.div>
-					)}
-				</AnimatePresence>
+				<div className="relative z-10 flex h-full flex-col">
+					<AnimatePresence>
+						{isAnimating && (
+							<motion.div
+								animate={{ opacity: tilesComplete ? 1 : 0 }}
+								className="flex h-full flex-col"
+								exit={{ opacity: 0 }}
+								initial={{ opacity: 0 }}
+								transition={{ duration: 0.3 }}
+							>
+								{children}
+							</motion.div>
+						)}
+					</AnimatePresence>
+				</div>
 			</Dialog.Popup>
 		</Dialog.Portal>
 	);
 }
 
 // Close Component (optional utility)
-type MobileMenuCloseProps = Dialog.Close.Props;
+type MobileMenuCloseProps = ComponentPropsWithoutRef<"button"> & {
+	asChild?: boolean;
+};
 
-function MobileMenuClose({ onClick, ...props }: MobileMenuCloseProps) {
+function MobileMenuClose({
+	asChild = false,
+	onClick,
+	children,
+	...props
+}: MobileMenuCloseProps) {
 	const { setIsAnimating } = useMobileMenuContext();
+	const Comp = asChild ? Slot : "button";
 
-	const handleClose: Dialog.Close.Props["onClick"] = (event) => {
+	const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
 		setIsAnimating(false);
 		onClick?.(event);
 	};
 
-	return <Dialog.Close onClick={handleClose} {...props} />;
+	return (
+		<Dialog.Close render={<Comp onClick={handleClose} {...props} />}>
+			{children}
+		</Dialog.Close>
+	);
 }
 
 // Link Component (with auto-close on click)

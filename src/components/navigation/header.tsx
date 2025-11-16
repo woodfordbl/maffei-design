@@ -1,8 +1,9 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { AnimatedButton } from "@/components/navigation/animated-button";
 import { AnimatedLink } from "@/components/navigation/animated-link";
 import { MobileMenu } from "@/components/navigation/mobile-menu";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const navLinks = [
 	{ label: "Portfolio", href: "/" },
@@ -11,6 +12,9 @@ const navLinks = [
 ];
 
 export function Header() {
+	const routerState = useRouterState();
+	const currentPath = routerState.location.pathname;
+
 	return (
 		<header className="sticky top-0 z-50 w-full border-border border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
 			<nav className="container mx-auto flex h-16 items-center justify-between px-4">
@@ -28,25 +32,56 @@ export function Header() {
 							<Button variant="outline">Menu</Button>
 						</MobileMenu.Trigger>
 						<MobileMenu.Content className="justify-start">
-							<nav className="flex flex-col items-start gap-8 p-8">
-								{navLinks.map((link) => (
-									<MobileMenu.Link asChild key={link.href}>
-										<AnimatedLink
-											className="font-bold text-4xl"
-											inverted
-											to={link.href as "/"}
-										>
-											{link.label}
-										</AnimatedLink>
-									</MobileMenu.Link>
-								))}
-								<AnimatedLink
-									className="font-bold text-4xl"
-									inverted
-									to="/contact"
-								>
-									Contact
-								</AnimatedLink>
+							<div className="flex flex-col gap-4 p-8">
+								<h2 className="font-bold text-5xl text-background uppercase">
+									Menu
+								</h2>
+								<MobileMenu.Close asChild>
+									<button
+										className="flex w-fit items-center gap-2 font-medium text-background text-sm uppercase tracking-wider"
+										type="button"
+									>
+										<span className="rotate-180 text-xl">↓</span>
+										<span>Close</span>
+									</button>
+								</MobileMenu.Close>
+							</div>
+							<nav className="flex flex-1 flex-col items-start justify-start gap-6 p-8 pt-12">
+								{navLinks.map((link) => {
+									const isActive = currentPath === link.href;
+									return (
+										<MobileMenu.Link asChild key={link.href}>
+											<AnimatedLink
+												className={cn(
+													"font-bold text-2xl uppercase transition-colors sm:text-3xl md:text-4xl lg:text-5xl",
+													isActive
+														? "text-background"
+														: "text-background/60 hover:text-background"
+												)}
+												preload="intent"
+												preloadIntentProximity={100}
+												to={link.href as "/"}
+											>
+												{link.label}
+											</AnimatedLink>
+										</MobileMenu.Link>
+									);
+								})}
+								<MobileMenu.Link asChild>
+									<AnimatedLink
+										className={cn(
+											"font-bold text-2xl uppercase transition-colors sm:text-3xl md:text-4xl lg:text-5xl",
+											currentPath === "/contact"
+												? "text-background"
+												: "text-background/60 hover:text-background"
+										)}
+										preload="intent"
+										preloadIntentProximity={100}
+										to="/contact"
+									>
+										Contact
+									</AnimatedLink>
+								</MobileMenu.Link>
 							</nav>
 						</MobileMenu.Content>
 					</MobileMenu.Root>
@@ -55,7 +90,12 @@ export function Header() {
 				{/* Center: Navigation Links (Desktop) */}
 				<div className="hidden items-center gap-8 md:flex">
 					{navLinks.map((link) => (
-						<AnimatedLink key={link.href} to={link.href as "/"}>
+						<AnimatedLink
+							key={link.href}
+							preload="intent"
+							preloadIntentProximity={100}
+							to={link.href as "/"}
+						>
 							{link.label}
 						</AnimatedLink>
 					))}
@@ -63,7 +103,12 @@ export function Header() {
 
 				{/* Right: Contact Button */}
 				<div className="hidden items-center md:flex">
-					<AnimatedButton showArrow to="/contact">
+					<AnimatedButton
+						preload="intent"
+						preloadIntentProximity={100}
+						showArrow
+						to="/contact"
+					>
 						Get in touch
 					</AnimatedButton>
 				</div>

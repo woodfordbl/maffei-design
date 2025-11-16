@@ -1,51 +1,35 @@
 import { motion } from "motion/react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { linkStyles, underlineStyles } from "./animated-link";
 
 /**
- * An animated external link component with hover animations.
- * Similar to AnimatedLink but uses a regular anchor tag for external links.
- *
- * Features:
- * - Hover animation: Underline animates from left to right on hover
- * - Uses regular anchor tag for external links (mailto, http, etc.)
+ * An animated external link component with hover underline animation.
  */
 export function AnimatedExternalLink({
 	className,
 	children,
-	href,
-	target,
-	rel,
 	...anchorProps
-}: React.ComponentProps<"a"> & {
-	/** The content to display inside the link */
-	children: React.ReactNode;
-}) {
+}: React.ComponentProps<"a">) {
 	const [isHovered, setIsHovered] = useState(false);
 
 	return (
+		// biome-ignore lint/a11y/noStaticElementInteractions: <Simple anchor element interaction>
 		<a
 			{...anchorProps}
-			className={cn(linkStyles, className)}
-			href={href}
+			className={cn(
+				"relative mx-1 inline-block px-1 py-1 font-medium text-sm",
+				className
+			)}
 			onMouseEnter={() => setIsHovered(true)}
 			onMouseLeave={() => setIsHovered(false)}
-			rel={rel}
-			target={target}
 		>
 			{children}
-			{/* Hover underline - animates from left to right */}
-			<motion.div
+			<motion.span
 				animate={{ scaleX: isHovered ? 1 : 0 }}
-				className={underlineStyles}
+				className="absolute bottom-0 left-0 h-px w-full bg-current"
 				initial={{ scaleX: 0 }}
 				style={{ transformOrigin: "left" }}
-				transition={{
-					delay: isHovered ? 0.15 : 0,
-					duration: 0.3,
-					ease: "easeInOut",
-				}}
+				transition={{ duration: 0.2, ease: "easeOut" }}
 			/>
 		</a>
 	);
