@@ -24,6 +24,17 @@ STASHED=$?
 pnpm dlx ultracite fix
 FORMAT_EXIT_CODE=$?
 
+# Run TypeScript type checking
+echo "Running type check..."
+pnpm typecheck
+TYPECHECK_EXIT_CODE=$?
+
+# Exit if typecheck failed
+if [ $TYPECHECK_EXIT_CODE -ne 0 ]; then
+  echo "❌ Type check failed. Please fix the errors before committing."
+  exit $TYPECHECK_EXIT_CODE
+fi
+
 # Restore working directory state
 if [ $STASHED -eq 0 ]; then
   # Re-stage the formatted files

@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { exampleGalleryItems, GalleryContainer } from "@/components/portfolio";
+import { GalleryContainer } from "@/components/portfolio/container";
+import { exampleGalleryItems } from "@/components/portfolio/example-data";
 
 export const Route = createFileRoute("/")({ component: HomePage });
 
