@@ -6,9 +6,11 @@ import {
 	Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { Analytics } from "@vercel/analytics/react";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { Toaster } from "@/components/ui/sonner";
+
 import appCss from "../styles.css?url";
 
 export const Route = createRootRoute({
@@ -66,6 +68,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				/>
 				<Scripts />
 				<Toaster />
+				<Analytics />
 			</body>
 		</html>
 	);
